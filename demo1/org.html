@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
+    <link rel="stylesheet" href="./fonts/remixicon.css">
+    <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/org.css">
+
+    <style>
+
+    </style>
+
+
+    <script>
+
+
+
+        class OrgUnitNode {
+            name = null;
+            isExpanded = false
+            childOrgUnitNode = null;
+
+            constructor(name, childOrgUnitNode) {
+                this.name = name
+                this.childOrgUnitNode = childOrgUnitNode
+            }
+        }
+
+
+        let treeData = [
+            new OrgUnitNode("1", [
+                new OrgUnitNode("1-1", [
+                    new OrgUnitNode("1-1-1", null),
+                    new OrgUnitNode("1-1-2", null),
+                    new OrgUnitNode("1-1-3", null),
+                    new OrgUnitNode("1-1-4", [
+                        new OrgUnitNode("1-1-4-1", null),
+                        new OrgUnitNode("1-1-4-2", null),
+                        new OrgUnitNode("1-1-4-3", null)
+                    ]),
+                    new OrgUnitNode("1-1-5", null),
+                ]),
+                new OrgUnitNode("1-2", null),
+                new OrgUnitNode("1-3", null)
+            ]),
+            new OrgUnitNode("2", [
+                new OrgUnitNode("2-1", null),
+                new OrgUnitNode("2-2", null),
+                new OrgUnitNode("2-3", null)
+            ]),
+        ]
+
+
+        function createTree(treeData) {
+            let ul = document.createElement("ul");
+
+            if (treeData == null || !Array.isArray(treeData) || treeData.length == 0) {
+                return ul;
+            }
+
+            for (let index = 0; index < treeData.length; index++) {
+                const element = treeData[index]
+
+                const li = document.createElement("li")
+                li.setAttribute("index", index)
+
+                const div = document.createElement("div")
+
+                const nameSpan = document.createElement("span")
+                nameSpan.textContent = element.name
+
+                if (element.isExpanded) {
+                    div.insertAdjacentHTML("beforeend", "<i class='ri-arrow-down-s-fill'></i>")
+                } else {
+                    div.insertAdjacentHTML("beforeend", "<i class='ri-arrow-right-s-fill'></i>")
+                }
+                div.insertAdjacentElement("beforeend", nameSpan)
+
+                li.insertAdjacentElement("beforeend", div)
+
+                if (element.isExpanded) {
+                    li.insertAdjacentElement("beforeend", createTree(element.childOrgUnitNode))
+                }
+
+                ul.appendChild(li)
+            }
+            return ul
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let navDiv = document.querySelector(".content .left")
+
+            navDiv.appendChild(createTree(treeData))
+            navDiv.addEventListener("click", (event) => {
+                if (event.target.tagName === "SPAN") {
+                    const parents = [];
+
+                    let parent = event.target.parentNode.parentNode;
+                    while (parent !== null && parent.tagName === "LI") {
+                        parents.unshift(parent)
+                        parent = parent.parentNode;
+                        if (parent.tagName === "UL") {
+                            parent = parent.parentNode;
+                        }
+                    }
+
+                    console.log(parents);
+
+                    let curtNode = null;
+
+                    let curtTreeData = treeData
+                    parents.forEach(function (element) {
+                        let index = Number.parseInt(element.getAttribute("index"))
+                        curtNode = curtTreeData[index]
+                        if (curtNode.childOrgUnitNode != null) {
+                            curtTreeData = curtNode.childOrgUnitNode
+                        }
+                    })
+                    console.log(curtNode);
+                    if (curtNode.isExpanded) {
+                        curtNode.isExpanded = false
+                        event.target.previousElementSibling.classList.replace("ri-arrow-down-s-fill", "ri-arrow-right-s-fill")
+                        event.target.parentNode.parentNode.lastElementChild.remove()
+                    } else {
+                        curtNode.isExpanded = true
+                        event.target.previousElementSibling.classList.replace("ri-arrow-right-s-fill", "ri-arrow-down-s-fill")
+                        event.target.parentNode.parentNode.appendChild(createTree(curtNode.childOrgUnitNode))
+                    }
+                }
+            })
+
+            // 设置数据框禁用
+
+            let disableInput = document.querySelectorAll(".disable")
+            disableInput.forEach(function (element) {
+                console.log(element);
+                element.setAttribute("disabled", "disabled")
+            })
+        })
+    </script>
+
+
+</head>
+
+<body>
+    <div class="nav-org">
+        <div>
+            <span>组织结构</span>
+            <i class="ri-arrow-right-s-line"></i>
+            <span>机构/部门管理</span>
+            <button class="default-button-style" type="button">创建</button>
+        </div>
+
+        <div>
+            <a href="#">导入组织</a>
+            <a href="#">导出组织</a>
+            <a href="#">下载导入模板</a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="left">
+            <div class="domain" style="font-size: 0px;">
+                <span style="font-size: 14px;">当前域：</span>
+                <div>
+                    <button type="button" class="outline-button">test</button>
+                    <button type="button" class="outline-button"><i class="ri-arrow-down-s-fill"></i></button>
+                </div>
+            </div>
+            <!-- <ul>
+                <li>
+                    <i class="ri-arrow-down-s-fill"></i>
+                    <span>1</span>
+                    <ul>
+                        <li>
+                            <span>1-1</span>
+                        </li>
+                        <li>
+                            <span>1-2</span>
+                        </li>
+                        <li>
+                            <span>1-3</span>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <i class="ri-arrow-down-s-fill"></i>
+                    <span>2</span>
+                    <ul>
+                        <li>
+                            <span>2-1</span>
+                        </li>
+                        <li>
+                            <span>2-2</span>
+                        </li>
+                        <li>
+                            <span>2-3</span>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <i class="ri-arrow-down-s-fill"></i>
+                    <span>3</span>
+                    <ul>
+                        <li>
+                            <span>3-1</span>
+                        </li>
+                        <li>
+                            <span>3-2</span>
+                        </li>
+                        <li>
+                            <span>3-3</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul> -->
+        </div>
+        <div class="right">
+            <p class="title">编辑组织单元</p>
+
+
+            <form action="#" id="create-org">
+                <div>
+                    <label for="">
+                        <span class="circle"></span>
+                        组织名称：
+                    </label>
+                    <input type="text">
+                </div>
+
+                <div>
+                    <label for="">
+                        <span class="circle"></span>
+                        <span>上级组织：</span>
+                    </label>
+                    <input type="text" class="disable">
+                </div>
+
+                <div>
+                    <label for="">
+                        <span class="circle"></span>
+                        <span>组织排序：</span>
+                    </label>
+                    <input type="text">
+                </div>
+
+                <div>
+                    <label for="">
+                        <span class="circle"></span>
+                        <span>组织形式（机构/部门）：</span>
+                    </label>
+                    <label for="org"><input type="checkbox" id="org">选中为机构</label>
+                </div>
+                <div>
+                    <label for="">
+                        <span class="circle"></span>
+                        <span>失效：</span>
+                    </label>
+                    <label for="invalid"><input type="checkbox" id="invalid">选中为失效</label>
+                </div>
+                <div>
+                    <label for="">
+                        <span class="circle"></span>
+                        绑定MAC：
+                    </label>
+                    <label for="mac"><input type="checkbox" id="mac">选中为绑定（域名用MAC绑定下有效）</label>
+                </div>
+                <div>
+                    <label for="">
+                        <span class="circle"></span>
+                        创建时间：
+                    </label>
+                    <input type="text" class="disable">
+                </div>
+                <div>
+                    <label for="">
+                        <span class="circle"></span>
+                        更新时间：
+                    </label>
+                    <input type="text" class="disable">
+                </div>
+                <div id="buttons">
+                    <button type="button" class="outline-button">保存信息</button>
+                    <button type="button" class="outline-button" disabled>删除组织</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
+    <link rel="stylesheet" href="./fonts/remixicon.css">
+    <link rel="stylesheet" href="./css/base.css">
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            min-width: 1126px
+        }
+
+        .nav-h {
+            height: 40px;
+        }
+
+        .nav {
+            min-width: 1000px;
+            background-color: #f5f0f0;
+        }
+
+        .nav-ul>li {
+            position: relative;
+            float: left;
+            height: inherit;
+            line-height: 40px;
+        }
+
+        .nav-ul>li>a {
+            text-align: center;
+            padding: 0 14px;
+            font-weight: bold;
+        }
+
+        .nav-ul li:hover {
+            background-color: #eee;
+            color: #337ab7;
+        }
+
+        .nav-ul li:hover .down-menu {
+            display: block;
+        }
+
+
+        .nav-ul .down-menu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 160px;
+            top: 40px;
+            left: 0;
+            color: black;
+            padding: 5px 0;
+            border: 1px solid #ccc;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, .3);
+        }
+
+        .nav-ul .down-menu li {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .nav #logout {
+            float: right;
+            background-color: #75B0F2;
+            padding: 0 14px;
+        }
+
+        .content {
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            min-width: 1126px;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let navLi = document.querySelectorAll(".nav-ul .down-menu li")
+            for (let index = 0; index < navLi.length; index++) {
+                navLi[index].onclick = function () {
+                    alert("点击了 " + navLi[index].textContent);
+                }
+            }
+        })
+    </script>
+</head>
+
+<body>
+    <div class="nav nav-h">
+        <ul class="nav-ul">
+            <li>
+                <a href="javascript:;">服务器</a><i class="ri-arrow-down-s-fill"></i>
+                <div class="down-menu">
+                    <ul>
+                        <li>修改密码</li>
+                        <li>参数设置</li>
+                        <li>配置中心</li>
+                        <li>注册授权</li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a href="javascript:;">组织结构</a><i class="ri-arrow-down-s-fill"></i>
+                <div class="down-menu">
+                    <ul>
+                        <li>域管理</li>
+                        <li>机构/部门管理</li>
+                        <li>成员管理</li>
+                        <li>工作群组管理</li>
+                        <li>登录日志</li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a href="javascript:;">权限管理</a><i class="ri-arrow-down-s-fill"></i>
+                <div class="down-menu">
+                    <ul>
+                        <li>基本权限管理</li>
+                        <li>组织结构互通权限</li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a href="javascript:;">客户端管理</a><i class="ri-arrow-down-s-fill"></i>
+                <div class="down-menu">
+                    <ul>
+                        <li>门户集成管理</li>
+                        <li>微门户集成管理</li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a href="javascript:;">V社区</a><i class="ri-arrow-down-s-fill"></i>
+                <div class="down-menu">
+                    <ul>
+                        <li>V社区</li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+        <button type="button" id="logout" class="nav-h clear-button-style">退出</button>
+    </div>
+    <div class="content">
+        <iframe src="./org.html" frameborder="0"></iframe>
+    </div>
+</body>
+
+</html>
